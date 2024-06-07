@@ -1,0 +1,1 @@
+export const POKEMON_API_START_PAGE = "offset=0&limit=8";

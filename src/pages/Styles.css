@@ -1,0 +1,21 @@
+.App {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    max-height: 96vh;
+  }
+
+.lateral-Menu{
+    width: 10%;
+    height: 100vh;
+}
+
+.pages{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+

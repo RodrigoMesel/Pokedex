@@ -1,0 +1,50 @@
+.content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.pokemon-infos{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 2rem;
+}
+
+.pokemon-text{
+  display: flex;
+  flex-direction: row;
+  gap: 0.3rem
+}
+
+.form{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.inputForm{
+  width: 50%;
+  border-radius: 2rem;
+  padding: 0.5rem 1rem;
+}
+
+.capture-button{
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-right: 2rem;
+}
+
+.advertise{
+  margin-bottom: 2rem;
+  font-size: 14px;
+  color: red;
+}
+
+  

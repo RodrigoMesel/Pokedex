@@ -3,24 +3,43 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fluentui/react-components": "^9.53.0",
+    "@reduxjs/toolkit": "^2.2.5",
+    "electron-serve": "^2.0.0",
+    "electron-store": "^9.0.0",
+    "jest-fetch-mock": "^3.0.3",
+    "react-redux": "^9.1.2",
+    "react-router-dom": "^6.23.1",
+    "react-toastify": "^10.0.5"
+  },
+  "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.12",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "concurrently": "^8.2.2",
+    "electron": "^30.0.6",
+    "electron-builder": "^24.13.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "ts-jest": "^29.1.4",
     "typescript": "^4.4.2",
+    "wait-on": "^7.2.0",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "wait-on http://localhost:3000 && electron .",
+    "electron-dev": "concurrently \"yarn run start\" \"yarn run electron\"",
+    "preelectron-pack": "yarn run build",
+    "electron-pack": "electron-builder"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +58,29 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "main": "main.js",
+  "type": "module",
+  "build": {
+    "icon": "public/logo512.png",
+    "productName": "React and Electron App",
+    "files": [
+      "build/**/*",
+      "main.js"
+    ],
+    "extraMetadata": {
+      "main": "main.js"
+    },
+    "win": {},
+    "linux": {},
+    "mac": {}
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!@fluentui)"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    }
   }
 }
