@@ -10,7 +10,7 @@ An interactive desktop application to train and manage your Pokémon using React
 
 - **React and Electron Communication**: How these technologies work together to create seamless desktop applications.
 - **React Redux**: State management in modern React applications.
-- **API Calls**: Calls to the ![pokemon api](https://pokeapi.co/)
+- **API Calls**: Calls to the [pokemon api](https://pokeapi.co/)
 - **Redux Toolkit Query**: Effective server-state management for React applications.
 - **Pagination**: Efficient data display and navigation.
 - **Unit Testing**: Ensuring code reliability and functionality through tests.
