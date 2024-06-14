@@ -31,6 +31,7 @@ function Pokemons() {
                     name={pokemon.name}
                     originalName={pokemon.name}
                     isPokedex={false}
+                    id={null}
                 />
               )))
               :

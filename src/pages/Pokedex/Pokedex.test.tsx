@@ -4,6 +4,7 @@ import Pokedex from './Pokedex';
 import App from '../App';
 import { useGetPokemonInfosQuery, useGetPokemonPaginationQuery } from '../../redux/slices/pokemon-api-slice';
 import userEvent from '@testing-library/user-event';
+import {v4 as uuid} from 'uuid';
 
 
 
@@ -43,8 +44,9 @@ describe("Pokedex", () => {
 
     global.window.electronAPI = {
       setPokedex: jest.fn(),
-      receiveInitialUser: jest.fn().mockImplementation((callback) => callback('Rodrigo Oliveira')),
-      getUserPokedex: jest.fn().mockResolvedValue([])
+      receiveInitialUser: jest.fn().mockImplementation((callback) => callback({name: 'Rodrigo Oliveira', id: "02f55375-b904-430e-a67e-23a69f755ddb"})),
+      getUserPokedex: jest.fn().mockResolvedValue([]),
+      tradePokemons: jest.fn()
     };
 
     (useGetPokemonPaginationQuery as jest.Mock).mockClear();
@@ -77,9 +79,9 @@ describe("Pokedex", () => {
     renderWithProviders(<Pokedex />, {preloadedState: {
       pokedex: {
           captured: [
-              {name: 'Fogareu', originalName: 'charizard'},
-              {name: 'bulbasaur', originalName: 'bulbasaur'},
-              {name: 'Tortuguita', originalName: 'squirtle'}
+              {name: 'Fogareu', originalName: 'charizard', type: "fire", id: uuid()},
+              {name: 'bulbasaur', originalName: 'bulbasaur', type: "grass", id: uuid()},
+              {name: 'Tortuguita', originalName: 'squirtle', type: "water", id: uuid()}
           ]
       }
     }});
@@ -100,7 +102,7 @@ describe("Pokedex", () => {
     renderWithProviders(<Pokedex />, {preloadedState: {
         pokedex: {
             captured: [
-                {name: 'bulbasaur', originalName: 'bulbasaur'},
+                {name: 'bulbasaur', originalName: 'bulbasaur', type: "grass", id: uuid()},
             ]
         }
     }});
@@ -114,15 +116,15 @@ describe("Pokedex", () => {
 
   it('should change pokedex when account is changed', async () => {
     // ARRANGE
-    const {store} = renderWithProviders(<App/>, {
+    renderWithProviders(<App/>, {
       preloadedState: {
         user: {
-          loggedUser: {name: "Rodrigo Oliveira"},
+          loggedUser: {name: "Rodrigo Oliveira", id: "02f55375-b904-430e-a67e-23a69f755ddb"},
           users: [
-              {name: "Rodrigo Oliveira"},
-              {name: "Alison Nicolau"},
-              {name: "Giovani Faria"}
-          ]
+            {name: "Rodrigo Oliveira", id: "02f55375-b904-430e-a67e-23a69f755ddb"},
+            {name: "Alison Nicolau", id: "7ca8cc5c-55c9-4535-b191-43a9234d0656"},
+            {name: "Giovani Faria", id: "db1bfa04-7371-40f9-bd52-34e1e374f658"}
+          ],
         },
         pokedex: {
           captured: []

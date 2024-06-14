@@ -5,9 +5,9 @@ import userEvent from '@testing-library/user-event';
 
 global.window.electronAPI = {
   setPokedex: jest.fn(),
-  receiveInitialUser: jest.fn().mockImplementation((callback) => callback('Rodrigo Oliveira')),
-  getUserPokedex: jest.fn().mockResolvedValue([])
-
+  receiveInitialUser: jest.fn().mockImplementation((callback) => callback({name: 'Rodrigo Oliveira', id: "02f55375-b904-430e-a67e-23a69f755ddb"})),
+  getUserPokedex: jest.fn().mockResolvedValue([]),
+  tradePokemons: jest.fn()
 };
 
 

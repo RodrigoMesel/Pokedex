@@ -8,7 +8,7 @@ import { useAppSelector } from '../redux/hooks';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Divider } from '@fluentui/react-components';
-import { changeLoggedUser } from '../redux/slices/users-slice';
+import { changeLoggedUser} from '../redux/slices/users-slice';
 
 
 function App() {
@@ -18,17 +18,17 @@ function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        window.electronAPI.receiveInitialUser((userName) => {
-            if(typeof userName !== "string"){
-                throw new Error("Initial user format not valid");
+        window.electronAPI.receiveInitialUser((user) => {
+            if (!user || typeof user.id !== "string" || typeof user.name !== "string") {
+                throw new Error("Invalid initial user format");
             }
-            dispatch(changeLoggedUser({name: userName}));
+            dispatch(changeLoggedUser(user));
         });    
     }, [dispatch])
 
     useEffect(() => {
         if(loggedUser !== undefined && loggedUser.name !== undefined && loggedUser.name !== "") {
-            window.electronAPI.getUserPokedex(loggedUser.name)
+            window.electronAPI.getUserPokedex(loggedUser)
             .then(pokedex => {
                 dispatch(upadtePokedex(pokedex));
             })
@@ -36,8 +36,8 @@ function App() {
     }, [dispatch, loggedUser])
 
     useEffect(() => {
-        window.electronAPI.setPokedex(captured, loggedUser.name);
-    }, [captured, loggedUser.name])
+        window.electronAPI.setPokedex(captured, loggedUser);
+    }, [captured, loggedUser])
 
   return (
     <Router>

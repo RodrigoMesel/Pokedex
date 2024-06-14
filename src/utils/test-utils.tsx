@@ -5,8 +5,7 @@ import { Provider } from 'react-redux'
 import { setupStore } from '../redux/store'
 import type { AppStore, RootState } from '../redux/store'
 import { FluentProvider, teamsLightTheme } from '@fluentui/react-components';
-
-
+import { AppContextProvider } from '../context/app-context'
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
     preloadedState?: Partial<RootState>
@@ -24,7 +23,9 @@ export function renderWithProviders(
     function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
       return <Provider store={store}>
                 <FluentProvider theme={teamsLightTheme}>
-                  {children}
+                  <AppContextProvider>
+                    {children}
+                  </AppContextProvider>
                 </FluentProvider>
               </Provider>
     }

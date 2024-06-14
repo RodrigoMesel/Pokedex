@@ -66,7 +66,8 @@ describe("Pokemons", () => {
     global.window.electronAPI = {
       setPokedex: jest.fn(),
       receiveInitialUser: jest.fn().mockImplementation((callback) => callback('Rodrigo Oliveira')),
-      getUserPokedex: jest.fn().mockResolvedValue([])
+      getUserPokedex: jest.fn().mockResolvedValue([]),
+      tradePokemons: jest.fn()
     };
 
     (useGetPokemonPaginationQuery as jest.Mock).mockClear();

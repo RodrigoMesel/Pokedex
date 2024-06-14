@@ -11,8 +11,9 @@ describe("AccountChanger", () => {
     beforeEach(() => {
         global.window.electronAPI = {
             setPokedex: jest.fn(),
-            receiveInitialUser: jest.fn().mockImplementation((callback) => callback('Rodrigo Oliveira')),
-            getUserPokedex: jest.fn().mockResolvedValue([])
+            receiveInitialUser: jest.fn().mockImplementation((callback) => callback({name: 'Rodrigo Oliveira', id: "02f55375-b904-430e-a67e-23a69f755ddb"})),
+            getUserPokedex: jest.fn().mockResolvedValue([]),
+            tradePokemons: jest.fn()
           };
     })
 
@@ -21,13 +22,13 @@ describe("AccountChanger", () => {
     renderWithProviders(<AccountChanger/>, {
         preloadedState: {
             user: {
-                loggedUser: {name: "Rodrigo Oliveira"},
+                loggedUser: {name: "Rodrigo Oliveira", id: "02f55375-b904-430e-a67e-23a69f755ddb"},
                 users: [
-                    {name: "Rodrigo Oliveira"},
-                    {name: "Alison Nicolau"},
-                    {name: "Giovani Faria"}
-                ]
-            }
+                  {name: "Rodrigo Oliveira", id: "02f55375-b904-430e-a67e-23a69f755ddb"},
+                  {name: "Alison Nicolau", id: "7ca8cc5c-55c9-4535-b191-43a9234d0656"},
+                  {name: "Giovani Faria", id: "db1bfa04-7371-40f9-bd52-34e1e374f658"}
+                ],
+              },
         }
     });
     const accountButton = screen.getByRole('img', {name: "Rodrigo Oliveira"});
@@ -44,13 +45,13 @@ describe("AccountChanger", () => {
     renderWithProviders(<AccountChanger/>, {
         preloadedState: {
             user: {
-                loggedUser: {name: "Rodrigo Oliveira"},
+                loggedUser: {name: "Rodrigo Oliveira", id: "02f55375-b904-430e-a67e-23a69f755ddb"},
                 users: [
-                    {name: "Rodrigo Oliveira"},
-                    {name: "Alison Nicolau"},
-                    {name: "Giovani Faria"}
-                ]
-            }
+                  {name: "Rodrigo Oliveira", id: "02f55375-b904-430e-a67e-23a69f755ddb"},
+                  {name: "Alison Nicolau", id: "7ca8cc5c-55c9-4535-b191-43a9234d0656"},
+                  {name: "Giovani Faria", id: "db1bfa04-7371-40f9-bd52-34e1e374f658"}
+                ],
+              },
         }
     });
     const accountButton = screen.getByRole('img', {name: "Rodrigo Oliveira"});
@@ -73,13 +74,13 @@ describe("AccountChanger", () => {
     let {store} = renderWithProviders(<AccountChanger/>, {
         preloadedState: {
             user: {
-                loggedUser: {name: "Rodrigo Oliveira"},
+                loggedUser: {name: "Rodrigo Oliveira", id: "02f55375-b904-430e-a67e-23a69f755ddb"},
                 users: [
-                    {name: "Rodrigo Oliveira"},
-                    {name: "Alison Nicolau"},
-                    {name: "Giovani Faria"}
-                ]
-            }
+                  {name: "Rodrigo Oliveira", id: "02f55375-b904-430e-a67e-23a69f755ddb"},
+                  {name: "Alison Nicolau", id: "7ca8cc5c-55c9-4535-b191-43a9234d0656"},
+                  {name: "Giovani Faria", id: "db1bfa04-7371-40f9-bd52-34e1e374f658"}
+                ],
+              },
         }
     });
     const accountButton = screen.getByRole('img', {name: "Rodrigo Oliveira"});

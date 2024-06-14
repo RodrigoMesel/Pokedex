@@ -10,7 +10,9 @@ import Pokemons from '../../pages/Pokemons/Pokemons';
 global.window.electronAPI = {
   setPokedex: jest.fn(),
   receiveInitialUser: jest.fn().mockImplementation((callback) => callback('Rodrigo Oliveira')),
-  getUserPokedex: jest.fn().mockImplementation(() => Promise.resolve([]))
+  getUserPokedex: jest.fn().mockImplementation(() => Promise.resolve([])),
+  tradePokemons: jest.fn()
+
 };
 
 const mockedData = [
@@ -90,7 +92,7 @@ describe("CaptureDialog", () => {
 
   it('should not submit if form is invalid', async () => {
     // ARRANGE
-    renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass' onSubmit={mockedOnSubmit} isOpen={true} setIsOpen={jest.fn}/>)
+    renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass'/>)
     
     // ACT
     const pokeballButton = screen.getByRole('img', {name: 'pokeball'});
@@ -107,7 +109,7 @@ describe("CaptureDialog", () => {
 
   it('should submit if form is valid', async () => {
     // ARRANGE
-    renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass' onSubmit={mockedOnSubmit} isOpen={true} setIsOpen={jest.fn}/>)
+    renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass'/>)
     
     // ACT
     const pokeballButton = screen.getByRole('img', {name: 'pokeball'});
@@ -149,7 +151,7 @@ describe("CaptureDialog", () => {
 
   it('should appear error message after 2 seconds', async() => {
     // ARRANGE
-    renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass' onSubmit={mockedOnSubmit} isOpen={true} setIsOpen={jest.fn}/>)
+    renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass'/>)
     
     // ACT
     const inputArea = screen.getByRole('textbox');

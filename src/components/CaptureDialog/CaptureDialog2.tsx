@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Styles.css';
 import {
     Dialog,
@@ -12,22 +12,25 @@ import {
   } from "@fluentui/react-components";
 import pokeballIcon from '../../utils/pokeball-sprite.png'
 import { capitalize } from '../PokemonCard/PokemonCard';
-
+import { AppContext } from '../../context/app-context';
+import { useDispatch } from 'react-redux';
+import { capturePokemon } from '../../redux/slices/pokedex-slice';
+import {v4 as uuid} from 'uuid';
 
 interface DialogProps {
   pokemonName: string;
   pokemonSprite: string | undefined;
   pokemonType: string | undefined;
-  onSubmit: (name: string, success: boolean) => void;
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CaptureDialog: React.FC<DialogProps> = ({ pokemonName, pokemonSprite, pokemonType, onSubmit, isOpen, setIsOpen }) => {
+const CaptureDialog: React.FC<DialogProps> = ({ pokemonName, pokemonSprite, pokemonType }) => {
 
   const [inputText, setInputText] = useState<string>("");
   const [isInvalid, setIsInvalid] = useState<boolean>(false);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+  const {notify} = useContext(AppContext);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(timer) {
@@ -56,10 +59,17 @@ const CaptureDialog: React.FC<DialogProps> = ({ pokemonName, pokemonSprite, poke
     }
 
     if(finalName.length < 3 || finalName.length > 50) {
-        onSubmit(finalName, false)
+        notify("Error", capitalize(finalName) + " doesn't respect the name size restriction", "error");
+
     } 
     else {
-      onSubmit(finalName, true);    
+      dispatch(capturePokemon({
+        id: uuid(),
+        name: finalName,
+        originalName: pokemonName,
+        type: pokemonType!
+      }));
+      notify("Captured!", capitalize(finalName) + " was captured", "success");   
       setIsOpen(false);
     }
   };

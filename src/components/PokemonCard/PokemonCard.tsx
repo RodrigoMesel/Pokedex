@@ -1,17 +1,15 @@
 import { useGetPokemonInfosQuery } from '../../redux/slices/pokemon-api-slice';
 import './Styles.css';
 import { Card, CardHeader } from "@fluentui/react-components";
-import { useDispatch } from 'react-redux';
-import { capturePokemon } from '../../redux/slices/pokedex-slice';
 import CaptureDialog from '../CaptureDialog/CaptureDialog2';
-import React, { useState } from 'react';
-import ToastComponent from '../Toast/Toast';
-
+import React from 'react';
+import TradePokemon from '../TradePokemon/TradePokemon';
 
 interface PokemonCardInput{
     name: string,
     originalName: string,
     isPokedex: boolean,
+    id: string | null,
 }
 
 export function capitalize(name: string) {
@@ -21,33 +19,9 @@ export function capitalize(name: string) {
     return name[0].toUpperCase() + name.slice(1);
 }
 
-const PokemonCard: React.FC<PokemonCardInput> = ({name, originalName, isPokedex}) => {
+const PokemonCard: React.FC<PokemonCardInput> = ({name, originalName, isPokedex, id}) => {
 
     const { data } = useGetPokemonInfosQuery(originalName);
-
-    const [notify, setNotify] = useState<boolean>(false);
-    const [intent, setIntent] = useState<string>("");
-    const [newName, setNewName] = useState<string>(name);
-    const [isOpenDialog, setIsOpenDiaolg] = useState<boolean>(false);
-
-    const dispatch = useDispatch();
-
-    const handleSubmit = (newName: string, success: boolean) => {
-        setNewName(newName)
-    
-        if(!success) {
-            setIntent("error");
-            setNotify(true);
-        }
-        else {
-            dispatch(capturePokemon({
-                name: newName,
-                originalName: originalName
-            }));
-            setIntent("success")
-            setNotify(true);
-        }
-    }
 
     return(
         <Card className='card'>
@@ -77,14 +51,20 @@ const PokemonCard: React.FC<PokemonCardInput> = ({name, originalName, isPokedex}
                         <CaptureDialog  
                             pokemonName={originalName}
                             pokemonSprite={data?.sprites.front_default}
-                            pokemonType={data?.types[0].type.name}
-                            onSubmit={handleSubmit}
-                            isOpen={isOpenDialog}
-                            setIsOpen={setIsOpenDiaolg}/>
-                    </div>) : (<></>)}
+                            pokemonType={data?.types[0].type.name}/>
+                    </div>) : 
+                    (<div>
+                        <TradePokemon 
+                            pokemon={{
+                                name: name,
+                                originalName: originalName,
+                                id: id!,
+                                type: data?.types[0].type.name || "",
+                            }}
+                        />
+                    </div>)}
                 </div>
             </div>
-            <ToastComponent name={newName} intent={intent} activate={notify} setActivate={setNotify}/>
         </Card>
     )
 };

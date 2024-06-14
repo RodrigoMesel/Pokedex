@@ -1,21 +1,28 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Pokedex-container {
+  text-align: Pokedex-container;
 }
 
 .App-header {
   background-color: #ffffff;
-  min-height: 100vh;
+  width: 90vw;
+  min-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
+
+}
+
+.App-sub-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 90%;
+  align-items: center;
+  margin-right: 1rem;
+  
 }
 
 .pokedexgrid{
@@ -28,4 +35,17 @@
   margin-top: 1rem;
   max-height: 350px;
   overflow-y: scroll;
+}
+
+.captured{
+  margin-right: 12rem;
+}
+
+.resetPokedex{
+  height: 35px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-right: 3.5rem;
+  margin-top: 1rem;
 }

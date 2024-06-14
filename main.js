@@ -18,8 +18,8 @@ function isDev() {
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 600,
+        width: 1200, //1200
+        height: 585, // 600
         webPreferences: {
             nodeIntegration: false,
             preload: path.join(__dirname, 'preload.ts'),
@@ -42,26 +42,44 @@ function createWindow() {
     mainWindow.once('ready-to-show', () => {
         mainWindow.show()
 
-        let lastUser = store.get('lastUser', "Rodrigo Oliveira");
+        let lastUser = store.get('lastUser', {
+            name: "Rodrigo Oliveira",
+            id: "02f55375-b904-430e-a67e-23a69f755ddb"});
         mainWindow.webContents.send('initial-user', lastUser);
     });
 }
 
 function handleSetPokedex (event, pokedex, user) {
-    const pokedexPath = user + ".pokedex";
+    const pokedexPath = user.id + ".pokedex";
     store.set(pokedexPath, pokedex);
 }
 
 function handleGetUserPokedex (event, user) {
     store.set('lastUser', user);
-    const pokedexPath = user + ".pokedex"
+    const pokedexPath = user.id + ".pokedex"
     let pokedex = store.get(pokedexPath, []);
     return pokedex;
+}
+
+function handleTradePokemon(event, pokemon, userOwner, userDestiny) {
+    const ownerPokedexPath = userOwner.id + ".pokedex";
+    let ownerPokedex = store.get(ownerPokedexPath, []);
+    const destinyPokedexPath = userDestiny.id + ".pokedex";
+    let destinyPokedex = store.get(destinyPokedexPath, []);
+
+    ownerPokedex = ownerPokedex.filter(c => c.id !== pokemon.id);
+    destinyPokedex = [...destinyPokedex, pokemon];
+
+    store.set(ownerPokedexPath, ownerPokedex);
+    store.set(destinyPokedexPath, destinyPokedex);
+
+    return ownerPokedex;
 }
 
 
 app.whenReady().then(() => {
     ipcMain.on('set-pokedex', handleSetPokedex);
+    ipcMain.handle('trade-pokemon', handleTradePokemon);
     ipcMain.handle('get-user-pokedex', handleGetUserPokedex);
     createWindow()
   })
