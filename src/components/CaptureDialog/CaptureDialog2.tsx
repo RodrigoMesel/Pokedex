@@ -69,7 +69,7 @@ const CaptureDialog: React.FC<DialogProps> = ({ pokemonName, pokemonSprite, poke
         originalName: pokemonName,
         type: pokemonType!
       }));
-      notify("Captured!", capitalize(finalName) + " was captured", "success");   
+      notify("Captured!", capitalize(finalName) + " was captured", "success");
       setIsOpen(false);
     }
   };

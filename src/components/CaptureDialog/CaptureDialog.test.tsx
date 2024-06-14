@@ -1,10 +1,11 @@
 import App from '../../pages/App';
-import {renderWithProviders} from '../../utils/test-utils';
+import {renderWithProviders, renderWithProvidersAndPersonalizedContext} from '../../utils/test-utils';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'; 
 import { useGetPokemonInfosQuery, useGetPokemonPaginationQuery } from '../../redux/slices/pokemon-api-slice';
 import CaptureDialog from './CaptureDialog2';
 import Pokemons from '../../pages/Pokemons/Pokemons';
+import { AppContext } from '../../context/app-context';
 
 
 global.window.electronAPI = {
@@ -12,8 +13,8 @@ global.window.electronAPI = {
   receiveInitialUser: jest.fn().mockImplementation((callback) => callback('Rodrigo Oliveira')),
   getUserPokedex: jest.fn().mockImplementation(() => Promise.resolve([])),
   tradePokemons: jest.fn()
-
 };
+
 
 const mockedData = [
   {name: 'bulbasaur', originalName: 'bulbasaur'},
@@ -40,13 +41,14 @@ const bulbasaurMockedData = {
   }]
 }
 
-const mockedOnSubmit = jest.fn();
 
 jest.mock('../../redux/slices/pokemon-api-slice', () => ({
   pokemonApiSlice: jest.fn(),
   useGetPokemonPaginationQuery: jest.fn(),
   useGetPokemonInfosQuery: jest.fn(),
 }));
+
+const mockedNotify = jest.fn();
 
 describe("CaptureDialog", () => {
   beforeEach(() => {
@@ -92,8 +94,10 @@ describe("CaptureDialog", () => {
 
   it('should not submit if form is invalid', async () => {
     // ARRANGE
-    renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass'/>)
-    
+    renderWithProvidersAndPersonalizedContext(
+      <AppContext.Provider value={{ascendingOrder: true, filterName: "", filterTypes: [], isOptionsOpen: false, notify: mockedNotify, setAscendingOrder: jest.fn(), setFilterName: jest.fn(), setFilterTypes: jest.fn(), setIsOptionsOpen: jest.fn()}}>
+        <CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass'/>
+      </AppContext.Provider>)
     // ACT
     const pokeballButton = screen.getByRole('img', {name: 'pokeball'});
     await userEvent.click(pokeballButton);
@@ -104,13 +108,15 @@ describe("CaptureDialog", () => {
     await userEvent.click(submitButton);
 
     // ASSERT
-    expect(mockedOnSubmit).toHaveBeenCalledWith('Ab', false);
+    expect(mockedNotify).toHaveBeenCalledWith("Error", "Ab doesn't respect the name size restriction", "error")
   })
 
   it('should submit if form is valid', async () => {
     // ARRANGE
-    renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass'/>)
-    
+    renderWithProvidersAndPersonalizedContext(
+      <AppContext.Provider value={{ascendingOrder: true, filterName: "", filterTypes: [], isOptionsOpen: false, notify: mockedNotify, setAscendingOrder: jest.fn(), setFilterName: jest.fn(), setFilterTypes: jest.fn(), setIsOptionsOpen: jest.fn()}}>
+        <CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass'/>
+      </AppContext.Provider>)    
     // ACT
     const pokeballButton = screen.getByRole('img', {name: 'pokeball'});
     await userEvent.click(pokeballButton);
@@ -121,7 +127,7 @@ describe("CaptureDialog", () => {
     await userEvent.click(submitButton);
 
     // ASSERT
-    expect(mockedOnSubmit).toHaveBeenCalledWith('PlantaAmbulanteCarnivora', true);
+    expect(mockedNotify).toHaveBeenCalledWith("Captured!", "PlantaAmbulanteCarnivora was captured", "success")
 
   })
 
@@ -152,7 +158,9 @@ describe("CaptureDialog", () => {
   it('should appear error message after 2 seconds', async() => {
     // ARRANGE
     renderWithProviders(<CaptureDialog pokemonName='bulbasaur' pokemonSprite='aa.png' pokemonType='grass'/>)
-    
+    const pokeballButton = screen.getByRole('img', {name: 'pokeball'});
+    await userEvent.click(pokeballButton);
+
     // ACT
     const inputArea = screen.getByRole('textbox');
     await userEvent.type(inputArea, 'Aa');

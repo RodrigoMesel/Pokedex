@@ -40,6 +40,7 @@ const TradePokemon = ({pokemon} : TradePokemonProps) => {
                 .then(pokedex => {
                         notify("Traded!", capitalize(pokemon.name) + " was traded to " + selectedUser.name, "success");
                         dispatch(upadtePokedex(pokedex))
+                        setSelectedUser(null);
                         setIsOpen(false);
                     }
                 )
