@@ -54,7 +54,7 @@ const TradePokemon = ({pokemon} : TradePokemonProps) => {
         <Dialog open={isOpen}>
 
             <DialogTrigger disableButtonEnhancement>
-                <ArrowSwapRegular fontSize={"22px"} onClick={() => setIsOpen(true)}/>
+                <ArrowSwapRegular data-testid={'tradeDialog'} fontSize={"22px"} onClick={() => setIsOpen(true)}/>
             </DialogTrigger>
 
             <DialogSurface>

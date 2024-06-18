@@ -16,20 +16,23 @@ function Pokedex() {
 
   const filterPokemons = (pokemons : PokemonType[], filterName: string, filterTypes: string[]) => {
 
-    let filteredPokemon = pokemons;
-
+    if(pokemons === undefined || pokemons === null) {
+      return []
+    }
+    
     if(filterTypes.length > 0) {
-      filteredPokemon = filteredPokemon.filter(c => filterTypes.includes(c.type));
+      pokemons = pokemons.filter(c => filterTypes.includes(c.type));
     }
 
-    filteredPokemon = filteredPokemon.filter(c => c.name.toLowerCase().includes(filterName.toLowerCase()) ||
-    c.originalName.toLowerCase().includes(filterName.toLowerCase()));
+    if(filterName !== "") {
+      pokemons = pokemons.filter(c => c.name.toLowerCase().includes(filterName.toLowerCase()) ||
+      c.originalName.toLowerCase().includes(filterName.toLowerCase()));
+    }
 
-    return filteredPokemon.sort((a, b) => 
+    return pokemons.sort((a, b) => 
       (ascendingOrder ? 
         a.name.toLowerCase().localeCompare(b.name.toLowerCase()) :
         (b.name.toLowerCase().localeCompare(a.name.toLowerCase()))))
-      
   }
 
   const filteredPokemons = useMemo(() => {
